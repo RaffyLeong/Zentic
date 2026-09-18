@@ -1,0 +1,62 @@
+import { DM_Sans, Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
+import './globals.css';
+import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
+import { ChunkLoadErrorHandler } from '@/components/chunk-load-error-handler';
+import { AuthProvider } from '@/components/auth-provider';
+import { Navbar } from '@/components/navbar';
+import { Footer } from '@/components/footer';
+import type { Metadata } from 'next';
+
+export const dynamic = 'force-dynamic';
+
+const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-sans' });
+const jakartaSans = Plus_Jakarta_Sans({ subsets: ['latin'], variable: '--font-display' });
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
+
+export const metadata: Metadata = {
+  title: 'Zentic',
+  description: 'Compare UK properties side-by-side. Find your perfect home smarter and faster.',
+  metadataBase: new URL(process.env.NEXTAUTH_URL || 'http://localhost:3000'),
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+  },
+  openGraph: {
+    title: 'Zentic',
+    description: 'Compare UK properties side-by-side. Find your perfect home smarter and faster.',
+    images: ['/og-image.png'],
+  },
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script src="https://apps.abacus.ai/chatllm/appllm-lib.js" />
+      </head>
+      <body className={`${dmSans.variable} ${jakartaSans.variable} ${jetbrainsMono.variable} font-sans`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            <div className="min-h-screen flex flex-col">
+              <Navbar />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+          </AuthProvider>
+          <Toaster />
+          <ChunkLoadErrorHandler />
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
