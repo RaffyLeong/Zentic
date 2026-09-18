@@ -3,7 +3,7 @@ const path = require('path');
 
 const nextConfig = {
   distDir: process.env.NEXT_DIST_DIR || '.next',
-  output: 'standalone',
+  output: 'process.env.NEXT_OUTPUT_MODE',
   poweredByHeader: false,
   productionBrowserSourceMaps: false,
   outputFileTracingRoot: process.env.NEXT_OUTPUT_MODE ? path.join(__dirname, '../') : '/',
@@ -11,6 +11,8 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: { unoptimized: true },
+  serverExternalPackages: ['@prisma/client', 'prisma'],
+  allowedDevOrigins: ['127.0.0.1', '142e068501.na116.preview.abacusai.app'],
   // Next 16 BLOCKS unlisted origins on /_next/* and /__nextjs* in dev — including the /_next/hmr
   // WEBSOCKET upgrade, and Turbopack gates client module wiring on that socket, so a blocked origin
   // means the page renders but never hydrates, with no console error (the block writes a raw
